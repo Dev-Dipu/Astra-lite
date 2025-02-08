@@ -1,0 +1,22 @@
+-- i face the issues 🤔 --
+
+  routes: (in app.js)
+  app.use("/api/v1/healthcheck", healthCheckRouter)
+  - small typo here i write app.get at place of app.use
+
+
+-- Utility Functions --
+
+asyncHandler:
+  - any async code return promise that can be resolve or reject
+so everytime we need to use try catch block to handle it to tackle this issue and to handle async codes we use async handler.
+
+ApiResponse:
+  - use to standardize the response
+
+ApiError:
+  - use to standardize the error
+
+cleanUpTemp:
+  - use to delete the temp files from temp folder after uploading on cloudinary or if got any issue while creating profile then also clean temporary files
+

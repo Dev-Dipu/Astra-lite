@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'gilroy';
+    src: url('/fonts/GILROY-MEDIUM_EHDK2RLLDD.ttf');
+}
+
+body {
+    --sb-track-color: #3d404a;
+    --sb-thumb-color: #e1e1ffb3;
+    --sb-size: 6px;
+}
+
+#root{
+    font-family: 'gilroy', sans-serif;
+}
+
+::selection {
+    background-color: #27E0B3;
+}
+
+
+
+::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 5px;
+    height: var(--sb-size);
+    width: var(--sb-size);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 5px;
+    height: var(--sb-size);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    cursor: grab;
+}

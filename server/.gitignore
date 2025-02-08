@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Logs
+logs/
+*.log
+log.txt
+nohup.out
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# Editor & System Files
+.vscode/
+.idea/
+.DS_Store
