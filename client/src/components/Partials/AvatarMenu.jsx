@@ -25,7 +25,11 @@ const AvatarMenu = () => {
                 window.location.href = "/account";
             },
          },
-        { icon: FaBook, label: "Documentation" },
+        { icon: FaBook, label: "Documentation",
+            onClick: () => {
+                window.location.href = "/docs";
+            }
+         },
         { icon: FaCommentDots, label: "Feedback" },
         {
             icon: FaSignOutAlt,
