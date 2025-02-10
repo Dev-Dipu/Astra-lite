@@ -7,16 +7,18 @@ import User from "./pages/User";
 import Snippets from "./components/snippets/Snippets";
 import SnippetEditor from "./components/snippets/SnippetEditor";
 import Profile from "./pages/Profile";
+import Documentation from "./pages/Documentation";
 
 
 const App = () => {
 
     return (
-        <div onContextMenu={(e)=>e.preventDefault()} className="bg-[#0C0C0C] text-white min-h-screen h-screen overflow-hidden select-none">
+        <div onContextMenu={(e)=>e.preventDefault()} className="bg-[#0C0C0C] text-white min-h-screen h-screen  select-none">
             <Routes>
                 <Route path="/" element={<Signin />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/account" element={<Profile/>} />
+                <Route path="/docs" element={<Documentation/>} />
                 <Route path="/editor">
                     <Route path="snippet/:id" element={<SnippetEditor />} />
                 </Route>
