@@ -90,7 +90,7 @@ const Documentation = () => {
 
         <section className="mt-20 text-center flex items-center justify-center">
           <p className="text-gray-300">Developed by Developer Dipu</p>
-          <a href="https://github.com/dipu" target="_blank" className=" flex justify-center items-center gap-2 ml-2">
+          <a href="https://github.com/Dev-Dipu" target="_blank" className=" flex justify-center items-center gap-2 ml-2">
             <FaGithub size={24} />
           </a>
         </section>
