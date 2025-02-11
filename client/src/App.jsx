@@ -9,6 +9,7 @@ import SnippetEditor from "./components/snippets/SnippetEditor";
 import Profile from "./pages/Profile";
 import Documentation from "./pages/Documentation";
 import ErrorPage from "./pages/ErrorPage"
+import { ToastContainer } from "react-toastify"
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
                 </Route>
                 <Route path="*" element={<ErrorPage/>} />
             </Routes>
+            <ToastContainer/>
         </div>
     );
 };

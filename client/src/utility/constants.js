@@ -34,4 +34,15 @@ const runtimes = [
     { "language": "zig", "version": "0.10.1", "extension": ".zig" }
   ];
 
-export {runtimes}
+const toastOptions = {
+  position: "bottom-right",
+  theme: 'dark',
+  autoClose: 3600,
+  hideProgressBar: false,
+  closeOnClick: false,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+}
+
+export {runtimes, toastOptions}

@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../utility/axios";
 import { storage } from "../utility/helperFunctions";
+import { toast } from "react-toastify";
+import { toastOptions } from "../utility/constants";
 
 const Register = () => {
     const {
@@ -113,6 +115,7 @@ const Register = () => {
             if (data.success) {
                 const { accessToken } = data.data;
                 storage.set("accessToken", accessToken);
+                toast.success(data.message, toastOptions)
                 navigate("/snippets");
             }
         })

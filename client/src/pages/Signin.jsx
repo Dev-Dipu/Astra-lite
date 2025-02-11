@@ -3,6 +3,8 @@ import {useForm} from "react-hook-form";
 import axios from "../utility/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { storage } from "../utility/helperFunctions";
+import { toast } from "react-toastify";
+import { toastOptions } from "../utility/constants";
 
 const Signin = () => {
     const {register, handleSubmit} = useForm();
@@ -17,6 +19,7 @@ const Signin = () => {
                 storage.set("accessToken", accessToken);
                 navigate("/snippets");
             }
+            toast.success(data.message, toastOptions)
         })
         .catch(err => {
             console.log(err);
