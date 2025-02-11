@@ -8,6 +8,7 @@ import Snippets from "./components/snippets/Snippets";
 import SnippetEditor from "./components/snippets/SnippetEditor";
 import Profile from "./pages/Profile";
 import Documentation from "./pages/Documentation";
+import ErrorPage from "./pages/ErrorPage"
 
 
 const App = () => {
@@ -27,7 +28,7 @@ const App = () => {
                     <Route path={"pixelpen"} element={<div>pixelpen</div>} />
                     <Route path={"workspace"} element={<div>workspace</div>} />
                 </Route>
-                <Route path="*" element={<h1>Not Found</h1>} />
+                <Route path="*" element={<ErrorPage/>} />
             </Routes>
         </div>
     );
