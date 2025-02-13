@@ -65,6 +65,10 @@ import { UserContext } from "../../context/Context";
 import { runtimes } from "../../utility/constants";
 import { FaDownload, FaHeart, FaRegHeart } from "react-icons/fa";
 import { formatDistanceToNowStrict } from "date-fns";
+import { RiBardFill } from "react-icons/ri";
+import { PiPaperPlaneRightFill } from "react-icons/pi";
+import { askAI } from "../../utility/askAI";
+import ReactMarkdown from "react-markdown"
 
 const languageExtensions = {
     javascript,
@@ -139,7 +143,9 @@ const SnippetEditor = () => {
     const [fontSize, setFontSize] = useState(16); // Default font size
     const [fontStyle, setFontStyle] = useState("monospace"); // Default font style
     const [saveMoreOption, setSaveMoreOption] = useState(false);
-    const [like, setLike] = useState([])
+    const [like, setLike] = useState([]);
+    const [query, setQuery] = useState("");
+    const [aiResponse, setAiResponse] = useState({});
 
     const handleThemeChange = (event) => {
         const selectedTheme = editorThemes[event.target.value];
@@ -173,13 +179,22 @@ const SnippetEditor = () => {
             });
     };
 
+    const handleAI = async (event) => {
+        if (event.key === "Enter" && query.trim() !== "") {
+            const res = await askAI("generate", snippet?.language, code, query)
+            // console.log(res)
+            setAiResponse(res);
+            setQuery("");
+        }
+    };
+
     useEffect(() => {
         axios
             .get(`/snippets/${id}`)
             .then(({ data }) => {
                 setSnippet(data.data);
                 setCode(data.data.code);
-                setLike(data.data.likes)
+                setLike(data.data.likes);
             })
             .catch((err) => console.log(err));
     }, [id]);
@@ -213,7 +228,11 @@ const SnippetEditor = () => {
             editor.style.fontFamily = `${fontStyle}, monospace`;
         }
     }, [fontStyle]);
-    console.log(snippet);
+
+    useEffect(() => {
+        setCode(aiResponse?.code);
+
+    }, [aiResponse])
 
     return (
         <div className="p-6 h-screen flex flex-col">
@@ -240,13 +259,14 @@ const SnippetEditor = () => {
                                     <h1>{snippet?.title}</h1>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                     <h4 className="text-xs rounded-full px-3 py-[3px] bg-[#444857] w-fit">
-                                     {user?._id === snippet?.createdBy ?
-                                        snippet?.private
-                                            ? "Private"
-                                            : "Public" : "@"+state?.createdBy}
+                                    <h4 className="text-xs rounded-full px-3 py-[3px] bg-[#444857] w-fit">
+                                        {user?._id === snippet?.createdBy
+                                            ? snippet?.private
+                                                ? "Private"
+                                                : "Public"
+                                            : "@" + state?.createdBy}
                                     </h4>
-                                    
+
                                     <p className="text-xs">
                                         {formatDistanceToNowStrict(
                                             new Date(snippet?.createdAt),
@@ -337,31 +357,32 @@ const SnippetEditor = () => {
                             )}
                         </div>
                     ) : (
-                        <div className="flex items-center justify-center bg-[#1e1f26] h-fit px-4 py-2.5 rounded-[5px] cursor-pointer transition-all ease-in-out active:scale-90" onClick={
-                            (e)=>{
+                        <div
+                            className="flex items-center justify-center bg-[#1e1f26] h-fit px-4 py-2.5 rounded-[5px] cursor-pointer transition-all ease-in-out active:scale-90"
+                            onClick={(e) => {
                                 e.stopPropagation();
-                                axios.post(`/snippets/like/${snippet?._id}`)
-                                .then((response) => {
-                                    console.log();
-                                    setLike(response.data.data.likes);                                  
-    
-                                })
-                                .catch((error) => {
-                                    console.error(error);
-                                });
-                            }
-                        }>
-                            
-                            {snippet && [...like]?.includes(
-                                        user?._id
-                                    ) ? (
-                                        <div className="">
-                                            <img className="h-6"
-                                                src={"/images/Heart.svg"}
-                                                alt=""
-                                            />
-                                        </div>
-                                    ) : <FaRegHeart className="text-2xl scale-75"/>}
+                                axios
+                                    .post(`/snippets/like/${snippet?._id}`)
+                                    .then((response) => {
+                                        console.log();
+                                        setLike(response.data.data.likes);
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                    });
+                            }}
+                        >
+                            {snippet && [...like]?.includes(user?._id) ? (
+                                <div className="">
+                                    <img
+                                        className="h-6"
+                                        src={"/images/Heart.svg"}
+                                        alt=""
+                                    />
+                                </div>
+                            ) : (
+                                <FaRegHeart className="text-2xl scale-75" />
+                            )}
                         </div>
                     )}
                     <button
@@ -399,30 +420,48 @@ const SnippetEditor = () => {
                         }}
                     />
                 </div>
-                <div className="bg-[#1e1f26]/0 flex-grow h-full rounded-[5px] overflow-hidden relative text-white">
-                    <div className="flex flex-col gap-2">
-                        <div>
-                            <label className="text-xl text-white">Input</label>
+                <div className="bg-[#1e1f26]/0 w-[24%] h-full rounded-[5px] overflow-hidden relative text-white flex flex-col gap-2">
+                    <div>
+                        <input
+                            type="text"
+                            name="input"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            className="px-3.5 py-2.5 bg-[#1e1f26] rounded-[5px] text-white outline-none w-full"
+                            placeholder="Enter required input"
+                            autoComplete="off"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            className="px-3 py-2 mt-2 bg-[#1e1f26] rounded-[5px] text-white outline-none text-base w-full min-h-36 resize-none"
+                            placeholder={snippet?.title + " ~"}
+                            value={output}
+                            disabled
+                            required
+                        ></textarea>
+                    </div>
+                    <div className="h-[80vh] rounded-[5px] bg-[#1e1f26] px-3 py-2 flex flex-col justify-between relative overflow-auto">
+                        <h1 className="flex items-center gap-1.5">
+                            <RiBardFill /> Asky
+                        </h1>
+
+                        <div className="overflow-auto">
+                        <ReactMarkdown>{aiResponse?.readme}</ReactMarkdown>
+                        </div>
+                        
+
+                        <div className="relative">
                             <input
                                 type="text"
-                                name="input"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                className="px-3 py-2 mt-2 bg-[#1e1f26] rounded-[5px] text-white outline-none text-xl w-full"
-                                placeholder="Enter required input"
-                                autoComplete="off"
-                                required
+                                placeholder="Ask something to ai"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                onKeyDown={handleAI}
+                                className="px-3 py-2 mt-2 bg-[#0C0C0C] rounded-[5px] text-white outline-none text-base w-full pl-10"
                             />
-                        </div>
-                        <div className="">
-                            <label className="text-xl text-white">Output</label>
-                            <textarea
-                                className="px-3 py-2 mt-2 bg-[#1e1f26] rounded-[5px] text-white outline-none placeholder:text-xl text-base w-full min-h-36 resize-none"
-                                placeholder="Execute your code"
-                                value={output}
-                                disabled
-                                required
-                            ></textarea>
+                            <PiPaperPlaneRightFill className="text-2xl absolute top-4 left-2" />
                         </div>
                     </div>
 
