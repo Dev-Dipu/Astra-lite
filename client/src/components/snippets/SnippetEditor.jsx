@@ -68,7 +68,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { RiBardFill } from "react-icons/ri";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import { askAI } from "../../utility/askAI";
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from "react-markdown";
 
 const languageExtensions = {
     javascript,
@@ -179,12 +179,26 @@ const SnippetEditor = () => {
             });
     };
 
+    const [isLoadingAI, setIsLoadingAI] = useState(false); // Loading state for AI response
+
     const handleAI = async (event) => {
         if (event.key === "Enter" && query.trim() !== "") {
-            const res = await askAI("generate", snippet?.language, code, query)
-            // console.log(res)
-            setAiResponse(res);
-            setQuery("");
+            setIsLoadingAI(true); // Start loading
+            try {
+                const res = await askAI(
+                    "generate",
+                    snippet?.language,
+                    code,
+                    query
+                );
+                console.log(res);
+                setAiResponse(res);
+            } catch (error) {
+                console.error("Error fetching AI response:", error); // Handle errors
+            } finally {
+                setIsLoadingAI(false); // Stop loading, even if there's an error
+                setQuery("");
+            }
         }
     };
 
@@ -230,9 +244,10 @@ const SnippetEditor = () => {
     }, [fontStyle]);
 
     useEffect(() => {
-        setCode(aiResponse?.code);
-
-    }, [aiResponse])
+        setCode(aiResponse?.code)
+      }, [aiResponse]);
+      
+      
 
     return (
         <div className="p-6 h-screen flex flex-col">
@@ -447,21 +462,71 @@ const SnippetEditor = () => {
                             <RiBardFill /> Asky
                         </h1>
 
-                        <div className="overflow-auto">
-                        <ReactMarkdown>{aiResponse?.readme}</ReactMarkdown>
+                        <div className="overflow-auto relative h-full">
+                            {" "}
+                            {/* Relative for positioning */}
+                            {isLoadingAI && ( // Show skeleton loader while loading
+                                <div className="animate-pulse p-4 space-y-3">
+                                    {[75, 100, 50, 80, 100, 60].map(
+                                        (width, index) => (
+                                            <div
+                                                key={index}
+                                                className={`h-4 rounded-md bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 
+                                                bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]`}
+                                                style={{ width: `${width}%` }}
+                                            ></div>
+                                        )
+                                    )}
+
+                                    <style>
+                                        {`
+                                    @keyframes shimmer {
+                                      0% { background-position: -200% 0; }
+                                      100% { background-position: 200% 0; }
+                                    }
+                                  `}
+                                    </style>
+                                </div>
+                            )}
+                            <div className={`${isLoadingAI ? "hidden" : ""}`}>
+                                {" "}
+                                {/* Hide content */}
+                                <ReactMarkdown className={"h-full"}>
+                                    {aiResponse?.readme}
+                                </ReactMarkdown>
+                            </div>
                         </div>
-                        
 
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Ask something to ai"
+                                placeholder="Ask something to AI..."
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 onKeyDown={handleAI}
-                                className="px-3 py-2 mt-2 bg-[#0C0C0C] rounded-[5px] text-white outline-none text-base w-full pl-10"
+                                className={`px-3 py-2 mt-2 rounded-[5px] text-white outline-none text-base w-full transition-all duration-300
+          ${
+              isLoadingAI
+                  ? "bg-[length:200%_200%] animate-gradient-move bg-gradient-to-r from-[#0C0C0C] via-[#3C3C3C] to-[#0C0C0C]"
+                  : "bg-[#0C0C0C] pl-10"
+          }`}
                             />
-                            <PiPaperPlaneRightFill className="text-2xl absolute top-4 left-2" />
+                            <style>
+                                {`
+          @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient-move {
+            animation: gradient-move 3s infinite linear;
+          }
+        `}
+                            </style>
+                            <PiPaperPlaneRightFill
+                                className={`text-2xl absolute top-4 left-2 transition-all duration-1000 ease-in-out
+              ${isLoadingAI ? "translate-x-[1200%] opacity-0" : ""}`} // Animated plane
+                            />
                         </div>
                     </div>
 
