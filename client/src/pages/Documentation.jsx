@@ -6,8 +6,8 @@ const Documentation = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-10">
-      <button onClick={() => navigate(-1)} className=" mb-4 px-4 py-2 bg-gray-800 rounded-lg fixed">
+    <div className="min-h-screen bg-[#0c0c0c] text-white p-10">
+      <button onClick={() => navigate(-1)} className=" mb-4 px-4 py-2 bg-[#1e1f26]  rounded-lg fixed">
         ⬅️ Go Back
       </button>
       <div className="max-w-4xl mx-auto">

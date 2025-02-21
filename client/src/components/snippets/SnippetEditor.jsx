@@ -182,14 +182,14 @@ const SnippetEditor = () => {
     const [isLoadingAI, setIsLoadingAI] = useState(false); // Loading state for AI response
 
     const handleAI = async (event) => {
-        if (event.key === "Enter" && query.trim() !== "") {
+        if ((event.key === "Enter" && query.trim() !== "") || event.type === "click") {
             setIsLoadingAI(true); // Start loading
             try {
                 const res = await askAI(
-                    "generate",
+                    event.type === "click" ? "explain" : "generate",
                     snippet?.language,
                     code,
-                    query
+                    event.type === "click" ? setQuery("explain me") && query : query
                 );
                 console.log(res);
                 setAiResponse(res);
@@ -200,6 +200,8 @@ const SnippetEditor = () => {
                 setQuery("");
             }
         }
+
+
     };
 
     useEffect(() => {
@@ -244,10 +246,8 @@ const SnippetEditor = () => {
     }, [fontStyle]);
 
     useEffect(() => {
-        setCode(aiResponse?.code)
-      }, [aiResponse]);
-      
-      
+        aiResponse?.code && setCode(aiResponse?.code);
+    }, [aiResponse]);
 
     return (
         <div className="p-6 h-screen flex flex-col">
@@ -411,7 +411,12 @@ const SnippetEditor = () => {
                 </div>
             </header>
             <div className="gap-4 flex-grow flex overflow-y-auto">
-                <div className="rounded-[5px] overflow-hidden w-[76%]">
+                <div className="rounded-[5px] overflow-hidden w-[76%] relative">
+                    {
+                        code && <button className="bg-[#0c0c0c] text-sm h-fit px-3 py-1.5 rounded-[5px] absolute z-50 top-0 right-0 m-2.5 opacity-80 hover:opacity-100" onClick={handleAI} >
+                        Explain me
+                    </button>
+                    }
                     <CodeMirror
                         className="h-full cmeditor"
                         value={code}
@@ -458,15 +463,27 @@ const SnippetEditor = () => {
                         ></textarea>
                     </div>
                     <div className="h-[80vh] rounded-[5px] bg-[#1e1f26] px-3 py-2 flex flex-col justify-between relative overflow-auto">
-                        <h1 className="flex items-center gap-1.5">
-                            <RiBardFill /> Asky
-                        </h1>
+                        <div className="flex items-center p-0.5 justify-between">
+                            <h1 className="flex items-center gap-1.5">
+                                <RiBardFill /> Asky
+                            </h1>
+                        </div>
 
                         <div className="overflow-auto relative h-full">
-                            {" "}
+                            {!isLoadingAI && (
+                                <div
+                                    className={`flex flex-col h-full items-center justify-center ${
+                                        aiResponse?.readme ? "hidden" : ""
+                                    }`}
+                                >
+                                    <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+                                        Hello, {user?.fullname?.split(" ")[0]}
+                                    </h1>
+                                </div>
+                            )}
                             {/* Relative for positioning */}
                             {isLoadingAI && ( // Show skeleton loader while loading
-                                <div className="animate-pulse p-4 space-y-3">
+                                <div className="animate-pulse pt-2 space-y-3">
                                     {[75, 100, 50, 80, 100, 60].map(
                                         (width, index) => (
                                             <div
@@ -500,7 +517,7 @@ const SnippetEditor = () => {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Ask something to AI..."
+                                placeholder="How can I help you 🤔"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 onKeyDown={handleAI}

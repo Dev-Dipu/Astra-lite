@@ -11,6 +11,7 @@ body {
     --sb-track-color: #3d404a;
     --sb-thumb-color: #e1e1ffb3;
     --sb-size: 6px;
+    background: #0c0c0c;
 }
 
 #root{

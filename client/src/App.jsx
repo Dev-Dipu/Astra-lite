@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Documentation from "./pages/Documentation";
 import ErrorPage from "./pages/ErrorPage"
 import { ToastContainer } from "react-toastify"
+import UnderDevelopment from "./components/Partials/UnderDevelopment";
 
 
 const App = () => {
@@ -26,8 +27,8 @@ const App = () => {
                 </Route>
                 <Route path="/" element={<User />}>
                     <Route path={"snippets"} element={<Snippets />} />
-                    <Route path={"pixelpen"} element={<div>pixelpen</div>} />
-                    <Route path={"workspace"} element={<div>workspace</div>} />
+                    <Route path={"pixelpen"} element={<UnderDevelopment/>} />
+                    <Route path={"workspace"} element={<UnderDevelopment/>} />
                 </Route>
                 <Route path="*" element={<ErrorPage/>} />
             </Routes>
