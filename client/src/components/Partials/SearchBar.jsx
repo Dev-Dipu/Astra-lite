@@ -55,7 +55,7 @@ const SearchBar = () => {
     };
 
     // Apply debounce to the handleSearch function
-    const debouncedHandleSearch = debounce(handleSearch, 500);
+    const debouncedHandleSearch = debounce(handleSearch, 300);
 
     const openSnippet = (id, createdBy) => {
       navigate(`/editor/snippet/${id}`, {

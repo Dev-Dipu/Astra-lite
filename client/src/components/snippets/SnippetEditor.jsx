@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "../../utility/axios";
 import Snippet from "./Snippet";
@@ -134,7 +134,7 @@ const SnippetEditor = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [code, setCode] = useState("");
-    const [autosave, setAutosave] = useState(false);
+    const [autosave, setAutosave] = useState(true);
     const [languageExtension, setLanguageExtension] = useState(javascript);
     const [theme, setTheme] = useState(editorThemes.Dracula); // Default theme
     const [showSettings, setShowSettings] = useState(false);
@@ -146,6 +146,8 @@ const SnippetEditor = () => {
     const [like, setLike] = useState([]);
     const [query, setQuery] = useState("");
     const [aiResponse, setAiResponse] = useState({});
+
+    const saveMenuRef = useRef(null);
 
     const handleThemeChange = (event) => {
         const selectedTheme = editorThemes[event.target.value];
@@ -226,12 +228,12 @@ const SnippetEditor = () => {
     }, [snippet]);
 
     useEffect(() => {
-        const debouncedSave = debounce(saveCode, 2500); // Debounce delay of 2.5 seconds
+        const debouncedSave = debounce(saveCode, 600); // Debounce delay of 2.5 seconds
 
         if (autosave) {
             const autosaveInterval = setTimeout(() => {
                 debouncedSave();
-            }, 5000);
+            }, 1200);
 
             return () => clearInterval(autosaveInterval); // Cleanup interval on component unmount
         }
@@ -248,6 +250,16 @@ const SnippetEditor = () => {
     useEffect(() => {
         aiResponse?.code && setCode(aiResponse?.code);
     }, [aiResponse]);
+
+    useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (saveMenuRef.current && !saveMenuRef.current.contains(event.target)) {
+                    setSaveMoreOption(false);
+                }
+            };
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => document.removeEventListener("mousedown", handleClickOutside);
+        }, []);
 
     return (
         <div className="p-6 h-screen flex flex-col">
@@ -307,7 +319,7 @@ const SnippetEditor = () => {
                 <div className="flex gap-5 items-center justify-end min-w-[350px]">
                     {user?._id === snippet?.createdBy ||
                     snippet?.canAccess?.includes(user?._id) ? (
-                        <div className="flex gap-[2px] relative">
+                        <div className="flex gap-[2px] relative" ref={saveMenuRef}>
                             <button
                                 onClick={saveCode}
                                 className="flex items-center justify-center gap-2 bg-[#1e1f26] h-fit px-5 py-2.5 rounded-[5px] rounded-tr-none rounded-br-none"
@@ -413,7 +425,7 @@ const SnippetEditor = () => {
             <div className="gap-4 flex-grow flex overflow-y-auto">
                 <div className="rounded-[5px] overflow-hidden w-[76%] relative">
                     {
-                        code && <button className="bg-[#0c0c0c] text-sm h-fit px-3 py-1.5 rounded-[5px] absolute z-50 top-0 right-0 m-2.5 opacity-80 hover:opacity-100" onClick={handleAI} >
+                        code && <button className="bg-[#0c0c0c] text-sm h-fit px-3 py-1.5 rounded-[5px] absolute z-10 top-0 right-0 m-2.5 opacity-80 hover:opacity-100" onClick={handleAI} >
                         Explain me
                     </button>
                     }
@@ -548,7 +560,7 @@ const SnippetEditor = () => {
                     </div>
 
                     <div
-                        className={`absolute top-0 right-0 w-full h-full bg-[#1e1f26] px-4 py-3 transition-transform duration-300 ease-in-out ${
+                        className={`absolute top-0 right-0 w-full h-full bg-[#1e1f26] px-4 py-3 pl-5 transition-transform duration-300 ease-in-out ${
                             !showSettings && "translate-x-[101%]"
                         }`}
                     >
