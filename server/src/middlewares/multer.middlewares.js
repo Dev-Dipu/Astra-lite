@@ -4,7 +4,8 @@ import fs from "fs/promises";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "./public/temp");
+        const isVercel = process.env.VERCEL === "1"; 
+        cb(null, isVercel ? "/tmp" : "./public/temp");
     },
     filename: function (req, file, cb) {
         const uniqueSuffix =
