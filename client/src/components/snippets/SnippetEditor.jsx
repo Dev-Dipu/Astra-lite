@@ -174,7 +174,7 @@ const SnippetEditor = () => {
         axios
             .patch(`/snippets/save/${id}`, { code })
             .then(() => {
-                console.log("Code saved successfully.");
+                // console.log("Code saved successfully.");
             })
             .catch((err) => {
                 console.error("Error saving code:", err);
@@ -193,7 +193,7 @@ const SnippetEditor = () => {
                     code,
                     event.type === "click" ? setQuery("explain me") && query : query
                 );
-                console.log(res);
+                // console.log(res);
                 setAiResponse(res);
             } catch (error) {
                 console.error("Error fetching AI response:", error); // Handle errors
@@ -391,7 +391,6 @@ const SnippetEditor = () => {
                                 axios
                                     .post(`/snippets/like/${snippet?._id}`)
                                     .then((response) => {
-                                        console.log();
                                         setLike(response.data.data.likes);
                                     })
                                     .catch((error) => {

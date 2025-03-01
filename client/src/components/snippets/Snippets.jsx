@@ -119,7 +119,7 @@ const Snippets = () => {
 
     const handleUpdate = () => {
         // Update logic here
-        console.log("update feature is remaining...")
+        // console.log("update feature is remaining...")
         setShowMenu(false);
     };
 

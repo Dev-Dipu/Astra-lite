@@ -35,7 +35,7 @@ const Profile = () => {
     debounce((updatedUser) => {
       axios.put("/users/profile", updatedUser)
         .then(response => {
-          console.log("User data updated", response.data);
+          // console.log("User data updated", response.data);
           setUser(response.data.data); // Update state with response data
           setCheckUniqueStatus({ username: "" }); // Clear the availability status
         })
@@ -49,7 +49,7 @@ const Profile = () => {
       if (field === "username") {
         axios.get(`/services/checkunique/${field}/${value}`)
           .then(response => {
-            console.log(response.data.data)
+            // console.log(response.data.data)
             if (response.data.data) {
               setCheckUniqueStatus(prevState => ({ ...prevState, [field]: "Available" }));
               const updatedUser = { ...user, [field]: value };

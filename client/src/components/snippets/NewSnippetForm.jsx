@@ -34,7 +34,7 @@ const NewSnippetForm = ({ isOpen, onClose }) => {
             createdBy: user._id
         })
         .then(res => {
-            console.log(res);
+            // console.log(res);
             onClose(); // Close the panel
             setTitle(""); // Clear the title
             // open snippet editor with the new snippet id

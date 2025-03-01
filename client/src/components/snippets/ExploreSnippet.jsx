@@ -37,7 +37,6 @@ const ExploreSnippet = ({ data, userId }) => {
                             e.stopPropagation();
                             axios.post(`/snippets/like/${_id}`)
                             .then((response) => {
-                                console.log();
                                 setLike(response.data.data.likes);                                  
 
                             })
