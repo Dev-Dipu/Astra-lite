@@ -1,7 +1,8 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import axios from "../../utility/axios";
 import { UserContext } from "../../context/Context";
-import { FaUser, FaSignOutAlt, FaBook, FaCommentDots, FaMedal } from "react-icons/fa";
+import { IoDocumentText, IoChatboxEllipses } from "react-icons/io5";
+import { FaUser, FaSignOutAlt, FaMedal } from "react-icons/fa";
 import { storage } from "../../utility/helperFunctions";
 
 const AvatarMenu = () => {
@@ -25,12 +26,12 @@ const AvatarMenu = () => {
                 window.location.href = "/account";
             },
          },
-        { icon: FaBook, label: "Documentation",
+        { icon: IoDocumentText, label: "Documentation",
             onClick: () => {
                 window.location.href = "/docs";
             }
          },
-        { icon: FaCommentDots, label: "Feedback" },
+        { icon: IoChatboxEllipses, label: "Feedback" },
         {
             icon: FaSignOutAlt,
             label: "Logout",

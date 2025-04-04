@@ -27,6 +27,8 @@ const Snippets = () => {
 
     const menuRef = useRef(null);
 
+    const [filter, setFilter] = useState("all");
+
     const features = [
         {
             badge: "New",
@@ -185,11 +187,20 @@ const Snippets = () => {
                         </div>
 
                         <div className="flex gap-3">
-                            <select className="outline-none bg-[#1e1f26] py-2 px-4 rounded-[5px]">
-                                <option value="public">Public</option>
-                                <option value="private">Private</option>
-                                <option value="all">All</option>
-                            </select>
+                            <div className="bg-[#1e1f26] py-2 pl-4 pr-3 rounded-[5px]">
+                                <select
+                                    value={filter}
+                                    onChange={(e) =>
+                                        setFilter(e.target.value)
+                                    }
+                                    className="outline-none bg-[#1e1f26] w-20"
+                                >
+                                    <option value="all">All</option>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+
                             <button
                                 onClick={() => setSnippetPanel(true)}
                                 className="bg-[#1e1f26] hover:brightness-125 px-4 py-2 rounded-[5px]"
@@ -200,7 +211,13 @@ const Snippets = () => {
                     </div>
                     <div className="snippets mt-4 grid sm:grid-cols-1 md:grid-cols-2 gap-4">
                         {snippets.length ? (
-                            snippets.map((snippet) => (
+                            snippets
+                            .filter(snippet => {
+                                if (filter === "all") return true;
+                                if (filter === "public") return snippet.private === false;
+                                if (filter === "private") return snippet.private === true;
+                              })
+                            .map((snippet) => (
                                 <Snippet
                                     key={snippet._id}
                                     data={snippet}

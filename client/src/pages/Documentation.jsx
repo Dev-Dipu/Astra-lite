@@ -54,7 +54,7 @@ const Documentation = () => {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-3 ">📂 Project Structure</h2>
-          <div className="bg-gray-800 p-4 rounded-lg text-gray-300">
+          <div className="bg-zinc-800/90 p-4 rounded-lg text-gray-300">
             <pre>
 {`/server
   ├── config/         # Database & environment setup
