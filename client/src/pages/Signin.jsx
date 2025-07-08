@@ -65,20 +65,20 @@ const Signin = () => {
                     <h3>Or</h3>
                     <span className="block w-full bg-[#8a8a8a] h-[1px]"></span>
                 </div>
-                {/* <Link to={`${import.meta.env.VITE_AUTH_GOOGLE}`} className="flex items-center justify-center gap-4 border border-[#8a8a8a] hover:border-white py-3 rounded-full cursor-pointer transition-all ease duration-300">
+                <Link to={`${import.meta.env.VITE_AUTH_GOOGLE}`} className="flex items-center justify-center gap-4 border border-[#8a8a8a] hover:border-white py-3 rounded-full cursor-pointer transition-all ease duration-300">
                     <img
                         src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
                         className="w-6"
                     />
                     <h2 className="text-2xl">Continue with Google</h2>
-                </Link> */}
-                <div className="flex items-center justify-center gap-4 border border-[#8a8a8a] opacity-60 py-3 rounded-full cursor-pointer transition-all ease duration-300 grayscale">
+                </Link>
+                {/* <div className="flex items-center justify-center gap-4 border border-[#8a8a8a] opacity-60 py-3 rounded-full cursor-pointer transition-all ease duration-300 grayscale">
                     <img
                         src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
                         className="w-6"
                     />
                     <h2 className="text-2xl">Continue with Google</h2>
-                </div>
+                </div> */}
             </div>
         </div>
     );
